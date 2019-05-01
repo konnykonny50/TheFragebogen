@@ -2,24 +2,24 @@
 A QuestionnaireItem that has a predefined set of answer and one of these can be selected.
 A HTML select-element is used.
 
-@class QuestionnaireItemDefinedSelector
 @augments UIElement
 @augments UIElementInteractive
 @augments QuestionnaireItem
 @augments QuestionnaireItemDefined
-
-@param {string} [className] CSS class
-@param {string} question question
-@param {boolean} [required=false]
-@param {array} optionList
 */
-function QuestionnaireItemDefinedSelector(className, question, required, optionList) {
-    QuestionnaireItemDefined.call(this, className, question, required, optionList);
-}
-QuestionnaireItemDefinedSelector.prototype = Object.create(QuestionnaireItemDefined.prototype);
-QuestionnaireItemDefinedSelector.prototype.constructor = QuestionnaireItemDefinedSelector;
+class QuestionnaireItemDefinedSelector extends QuestionnaireItemDefined {
 
-QuestionnaireItemDefinedSelector.prototype._createAnswerNode = function() {
+    /**
+    @param {string} [className] CSS class
+    @param {string} question question
+    @param {boolean} [required=false]
+    @param {array} optionList
+    */
+    constructor(className, question, required, optionList) {
+    super(className, question, required, optionList);
+}
+
+_createAnswerNode() {
     var node = document.createElement("div");
 
     this.select = document.createElement("select");
@@ -43,13 +43,14 @@ QuestionnaireItemDefinedSelector.prototype._createAnswerNode = function() {
 
     this._applyAnswerToUI();
     return node;
-};
-QuestionnaireItemDefinedSelector.prototype._handleChange = function(event) {
+}
+
+_handleChange(event) {
     this.answer = this.select.value;
     this._sendReadyStateChanged();
-};
+}
 
-QuestionnaireItemDefinedSelector.prototype._applyAnswerToUI = function() {
+_applyAnswerToUI() {
     if (!this.isUIcreated()) {
         return;
     }
@@ -57,9 +58,9 @@ QuestionnaireItemDefinedSelector.prototype._applyAnswerToUI = function() {
     if (this.isAnswered()) {
         this.select.value = this.getAnswer();
     }
-};
+}
 
-QuestionnaireItemDefinedSelector.prototype.setAnswer = function(answer) {
+setAnswer(answer) {
     if (answer === null) {
         this.answer = null;
         this._applyAnswerToUI();
@@ -77,30 +78,31 @@ QuestionnaireItemDefinedSelector.prototype.setAnswer = function(answer) {
 
     this._sendReadyStateChanged();
     return true;
-};
+}
 
-QuestionnaireItemDefinedSelector.prototype.releaseUI = function() {
+releaseUI() {
     this.node = null;
     this.uiCreated = false;
     this.enabled = false;
 
     this.input = [];
     this.select = null;
-};
+}
 
-QuestionnaireItemDefinedSelector.prototype.getData = function() {
+getData() {
     return [this.getQuestion(), this.optionList, this.getAnswer()];
-};
+}
 
-QuestionnaireItemDefinedSelector.prototype._checkData = function(data) {
+_checkData(data) {
     return (data[0] === this.question) && (JSON.stringify(data[1]) === JSON.stringify(this.optionList));
-};
+}
 
-QuestionnaireItemDefinedSelector.prototype.setData = function(data) {
+setData(data) {
     if (!this._checkData(data)) {
         return false;
     }
 
     this.setAnswer(data[2]);
     return true;
-};
+}
+}

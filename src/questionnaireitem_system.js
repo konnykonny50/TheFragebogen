@@ -1,21 +1,23 @@
 /**
 An abstract QuestionnaireItem for system-defined answers.
 These will be answered automatically and should not provide a UI.
- 
+
 @abstract
-@class QuestionnaireItemSystem
 @augments UIElement
 @augments UIElementInteractive
 @augments QuestionnaireItem
 */
-function QuestionnaireItemSystem() {
-    QuestionnaireItem.apply(this, arguments);
+class QuestionnaireItemSystem extends QuestionnaireItem {
+
+    constructor() {
+    super(arguments);
 }
-QuestionnaireItemSystem.prototype = Object.create(QuestionnaireItem.prototype);
-QuestionnaireItemSystem.prototype.constructor = QuestionnaireItemSystem;
-QuestionnaireItemSystem.setVisible = function(visible) {
+
+setVisible(visible) {
     //NOPE
-};
-QuestionnaireItemSystem.isVisible = function() {
+}
+
+isVisible() {
     return false;
-};
+}
+}
